@@ -17,7 +17,8 @@ const app = new Frog({
 
 const SCARY_GARYS_ADDRESS = '0xd652Eeb3431f1113312E5c763CE1d0846Aa4d7BC'
 const ALCHEMY_API_KEY = 'pe-VGWmYoLZ0RjSXwviVMNIDLGwgfkao'
-const BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/QmX7Py8TGVGdp3ffXb4XGfd83WwmLZ8FyQV2PEquhAFZ2P'
+const BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/QmVxD55EV753EqPwgsaLWq4635sT6UR1M1ft2vhL3GZpeV'
+const ERROR_BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/Qma1Evr6rzzXoCDG5kzWgD7vekUpdj5VYCdKu8VcgSjxdD'
 const AIRSTACK_API_URL = 'https://api.airstack.xyz/gql'
 const AIRSTACK_API_KEY = '103ba30da492d4a7e89e7026a6d3a234e'
 
@@ -125,16 +126,16 @@ app.frame('/check', async (c) => {
         nftAmount = ownedNFTs.length;
       } else {
         errorMessage = 'No connected Ethereum addresses found';
-        backgroundImage = BACKGROUND_IMAGE;
+        backgroundImage = ERROR_BACKGROUND_IMAGE;
       }
     } catch (error) {
       console.error('Error checking NFTs:', error);
       errorMessage = 'Error checking NFTs';
-      backgroundImage = BACKGROUND_IMAGE;
+      backgroundImage = ERROR_BACKGROUND_IMAGE;
     }
   } else {
     errorMessage = 'No FID found for the user';
-    backgroundImage = BACKGROUND_IMAGE;
+    backgroundImage = ERROR_BACKGROUND_IMAGE;
   }
 
   const buttonText = errorMessage || `You own ${nftAmount} Scary Garys NFTs. Check again?`;
