@@ -1,8 +1,8 @@
 /** @jsxImportSource frog/jsx */
-import { Button, Frog } from 'frog'
-import { handle } from 'frog/vercel'
-import { neynar } from 'frog/middlewares'
-import axios from 'axios'
+import { Button, Frog } from 'frog';
+import { handle } from 'frog/vercel';
+import { neynar } from 'frog/middlewares';
+import axios from 'axios';
 
 const app = new Frog({
   basePath: '/api',
@@ -13,14 +13,14 @@ const app = new Frog({
     apiKey: 'NEYNAR_FROG_FM',
     features: ['interactor', 'cast'],
   })
-)
+);
 
-const SCARY_GARYS_ADDRESS = '0xd652Eeb3431f1113312E5c763CE1d0846Aa4d7BC'
-const ALCHEMY_API_KEY = 'pe-VGWmYoLZ0RjSXwviVMNIDLGwgfkao'
-const BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/QmVxD55EV753EqPwgsaLWq4635sT6UR1M1ft2vhL3GZpeV'
-const ERROR_BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/Qma1Evr6rzzXoCDG5kzWgD7vekUpdj5VYCdKu8VcgSjxdD'
-const AIRSTACK_API_URL = 'https://api.airstack.xyz/gql'
-const AIRSTACK_API_KEY = '103ba30da492d4a7e89e7026a6d3a234e'
+const SCARY_GARYS_ADDRESS = '0xd652Eeb3431f1113312E5c763CE1d0846Aa4d7BC';
+const ALCHEMY_API_KEY = 'pe-VGWmYoLZ0RjSXwviVMNIDLGwgfkao';
+const BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/QmX7Py8TGVGdp3ffXb4XGfd83WwmLZ8FyQV2PEquhAFZ2P';
+const ERROR_BACKGROUND_IMAGE = 'https://amaranth-adequate-condor-278.mypinata.cloud/ipfs/Qma1Evr6rzzXoCDG5kzWgD7vekUpdj5VYCdKu8VcgSjxdD';
+const AIRSTACK_API_URL = 'https://api.airstack.xyz/gql';
+const AIRSTACK_API_KEY = '103ba30da492d4a7e89e7026a6d3a234e';
 
 interface NFTMetadata {
   tokenId: string;
@@ -48,9 +48,10 @@ async function getConnectedAddresses(fid: string): Promise<string[]> {
 
     const variables = { fid };
 
-    const response = await axios.post(AIRSTACK_API_URL, 
+    const response = await axios.post(
+      AIRSTACK_API_URL,
       { query, variables },
-      { headers: { 'Authorization': AIRSTACK_API_KEY } }
+      { headers: { Authorization: AIRSTACK_API_KEY } }
     );
 
     const data = response.data;
@@ -74,34 +75,50 @@ async function getConnectedAddresses(fid: string): Promise<string[]> {
 }
 
 async function getOwnedScaryGarys(address: string): Promise<NFTMetadata[]> {
-  const url = `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}/getNFTs/`
+  const url = `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}/getNFTs/`;
   const params = {
     owner: address,
     contractAddresses: [SCARY_GARYS_ADDRESS],
     withMetadata: true,
-  }
+  };
 
   try {
-    const response = await axios.get(url, { params })
+    const response = await axios.get(url, { params });
     return response.data.ownedNfts.map((nft: any) => ({
       tokenId: nft.id.tokenId,
       imageUrl: nft.metadata.image,
-    }))
+    }));
   } catch (error) {
-    console.error('Error fetching Scary Garys:', error)
-    return []
+    console.error('Error fetching Scary Garys:', error);
+    return [];
   }
 }
+
+// Test image access directly to diagnose 403 Forbidden errors
+const testImageAccess = async (url: string) => {
+  try {
+    const response = await axios.get(url, { validateStatus: () => true });
+    console.log(
+      `Image fetch URL: ${url}, Status: ${response.status}, Headers: ${JSON.stringify(
+        response.headers
+      )}`
+    );
+  } catch (error) {
+    console.error('Error fetching image:', error);
+  }
+};
+
+// Test the accessibility of the images used in the frame
+testImageAccess(BACKGROUND_IMAGE);
+testImageAccess(ERROR_BACKGROUND_IMAGE);
 
 app.frame('/', (c) => {
   return c.res({
     image: BACKGROUND_IMAGE,
     imageAspectRatio: '1.91:1',
-    intents: [
-      <Button action="/check">Check Scary Garys NFTs</Button>
-    ],
-  })
-})
+    intents: [<Button action="/check">Check Scary Garys NFTs</Button>],
+  });
+});
 
 app.frame('/check', async (c) => {
   console.log('Full frameData:', JSON.stringify(c.frameData, null, 2));
@@ -143,11 +160,9 @@ app.frame('/check', async (c) => {
   return c.res({
     image: backgroundImage,
     imageAspectRatio: '1.91:1',
-    intents: [
-      <Button action="/check">{buttonText}</Button>
-    ],
-  })
-})
+    intents: [<Button action="/check">{buttonText}</Button>],
+  });
+});
 
-export const GET = handle(app)
-export const POST = handle(app)
+export const GET = handle(app);
+export const POST = handle(app);
