@@ -155,73 +155,12 @@ app.frame('/check', async (c) => {
     backgroundImage = ERROR_BACKGROUND_IMAGE;
   }
 
-  const buttonText = errorMessage || `You own ${nftAmount}`;
-
-  const originalFramesLink = 'https://scarygaryschecker.vercel.app/api' // Replace with your actual Frames link
-
-  // Construct the share text with the user's NFT count
-  const shareText = `I own ${nftAmount} Scary Garys NFTs! View your Scary Garys NFTs and make sure to follow @goldie on Farcaster!`;
-
-  // Construct the Farcaster share URL with both text and the embedded link
-  const farcasterShareURL = `https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds[]=${encodeURIComponent(originalFramesLink)}`;
+  const buttonText = errorMessage || `You own ${nftAmount} Scary Garys NFTs. Check again?`;
 
   return c.res({
     image: backgroundImage,
     imageAspectRatio: '1.91:1',
-    intents: [
-      <Button action="/check">{buttonText}</Button>,
-      <Button.Link href={farcasterShareURL}>Share</Button.Link>,
-    ],
-  });
-});
-
-app.frame('/share', async (c) => {
-  const fid = c.req.query('fid');
-  
-  if (!fid) {
-    return c.res({
-      image: ERROR_BACKGROUND_IMAGE,
-      imageAspectRatio: '1.91:1',
-      intents: [
-        <Button action="/check">Check Your NFTs</Button>
-      ]
-    });
-  }
-
-  let nftAmount = 0;
-
-  try {
-    const connectedAddresses = await getConnectedAddresses(fid.toString());
-    if (connectedAddresses.length > 0) {
-      const address = connectedAddresses[0];
-      const ownedNFTs = await getOwnedScaryGarys(address);
-      nftAmount = ownedNFTs.length;
-    }
-  } catch (error) {
-    console.error('Error fetching NFT info:', error);
-  }
-
-  return c.res({
-    image: (
-      <div style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#000000',
-        color: '#ffffff',
-        fontFamily: 'Arial, sans-serif',
-      }}>
-        <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>Scary Garys NFT Checker</h1>
-        <p style={{ fontSize: '36px', marginBottom: '20px' }}>This user owns {nftAmount} Scary Garys NFTs</p>
-      </div>
-    ),
-    imageAspectRatio: '1.91:1',
-    intents: [
-      <Button action="/check">Check Your NFTs</Button>
-    ]
+    intents: [<Button action="/check">{buttonText}</Button>],
   });
 });
 
