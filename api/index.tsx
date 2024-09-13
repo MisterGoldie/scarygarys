@@ -155,12 +155,12 @@ app.frame('/check', async (c) => {
     backgroundImage = ERROR_BACKGROUND_IMAGE;
   }
 
-  const buttonText = errorMessage || `You own ${nftAmount} Scary Garys NFTs. Check again?`;
+  const buttonText = errorMessage || `You own ${nftAmount}`;
 
-  const originalFramesLink = 'https://scarygarys-checker.vercel.app/api' // Replace with your actual Frames link
+  const originalFramesLink = 'https://scarygaryschecker.vercel.app/api' // Replace with your actual Frames link
 
   // Construct the share text with the user's NFT count
-  const shareText = `I own ${nftAmount} Scary Garys NFTs! Check your Scary Garys NFTs and make sure to follow @scarygarys on Farcaster!`;
+  const shareText = `I own ${nftAmount} Scary Garys NFTs! View your Scary Garys NFTs and make sure to follow @goldie on Farcaster!`;
 
   // Construct the Farcaster share URL with both text and the embedded link
   const farcasterShareURL = `https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds[]=${encodeURIComponent(originalFramesLink)}`;
