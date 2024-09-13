@@ -125,6 +125,12 @@ app.frame('/check', async (c) => {
   const { fid } = c.frameData || {};
   const { displayName, pfpUrl } = c.var.interactor || {};
 
+  const originalFramesLink = 'https://scarygaryschecker.vercel.app/api' // Replace with your actual Frames link
+
+  // Construct the Farcaster share URL with both text and the embedded link
+  const farcasterShareURL = `https://warpcast.com/~/compose?text=Check%20out%20this%20meme%20generator%20and%20make%20sure%20to%20follow%20@goldie%20on%20Farcaster!&embeds[]=${encodeURIComponent(originalFramesLink)}`
+
+
   console.log('FID:', fid);
   console.log('Display Name:', displayName);
   console.log('Profile Picture URL:', pfpUrl);
@@ -160,7 +166,16 @@ app.frame('/check', async (c) => {
   return c.res({
     image: backgroundImage,
     imageAspectRatio: '1.91:1',
-    intents: [<Button action="/check">{buttonText}</Button>],
+    intents: [
+    // Share Button with both text and link embedded
+    <Button.Link 
+    href={farcasterShareURL}
+  >
+    Share
+  </Button.Link>,  // This button now shares both text and the link
+
+    
+    <Button action="/check">{buttonText}</Button>],
   });
 });
 
