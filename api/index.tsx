@@ -4,10 +4,18 @@ import { handle } from 'frog/vercel';
 import { neynar } from 'frog/middlewares';
 import axios from 'axios';
 
-const app = new Frog({
+export const app = new Frog({ //Always include if using Airstack so it tracks moxie
   basePath: '/api',
-  imageOptions: { width: 1200, height: 630 },
-  title: 'Scary Garys NFT Checker',
+  imageOptions: { width: 1200, height: 628 },
+  title: 'Scary Garys',
+  hub: {
+    apiUrl: "https://hubs.airstack.xyz",
+    fetchOptions: {
+      headers: {
+        "x-airstack-hubs": "103ba30da492d4a7e89e7026a6d3a234e", // Your Airstack API key
+      }
+    }
+  }
 }).use(
   neynar({
     apiKey: 'NEYNAR_FROG_FM',
